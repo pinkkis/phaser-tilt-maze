@@ -1,0 +1,30 @@
+{
+	"defaultSeverity": "error",
+	"extends": [
+		"tslint:recommended"
+	],
+	"jsRules": {},
+	"rules": {
+		"object-literal-sort-keys": false,
+		"no-var-requires": false,
+		"ordered-imports": false,
+		"member-access": false,
+		"no-console": false,
+		"indent": [
+			true,
+			"tabs",
+			4
+		],
+		"quotemark": [
+			true,
+			"single",
+			"avoid-escape"
+		]
+	},
+	"rulesDirectory": [],
+	"linterOptions": {
+		"exclude": [
+			"**/node_modules/**"
+		]
+	}
+}

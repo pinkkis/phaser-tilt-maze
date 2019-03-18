@@ -1,0 +1,56 @@
+{
+  "name": "phaser-tilt-maza",
+  "version": "1.0.0",
+  "description": "mobile gyro tilt game test with phaser 3",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "extrude": "tile-extruder -w 32 -h 32",
+    "build": "webpack --mode production",
+    "start": "node --max_old_space_size=8192 ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --mode development --progress --port=8000 --host 0.0.0.0"
+  },
+  "browserslist": "> 1%, not dead",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pinkkis/phaser-tilt-maze.git"
+  },
+  "keywords": [],
+  "author": "Kristian Koivisto-Kokko <pinkkis@gmail.com> (http://pinkkis.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pinkkis/phaser-tilt-maze/issues"
+  },
+  "homepage": "https://github.com/pinkkis/phaser-tilt-maze#readme",
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/plugin-proposal-class-properties": "^7.3.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/w3c-generic-sensor": "^1.0.2",
+    "@types/w3c-permissions": "^1.0.1",
+    "babel-loader": "^8.0.5",
+    "copy-webpack-plugin": "^4.6.0",
+    "cross-env": "^5.2.0",
+    "css-loader": "^2.1.0",
+    "easystarjs": "^0.4.3",
+    "expose-loader": "^0.7.5",
+    "file-loader": "^3.0.1",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.5.0",
+    "phaser": "^3.16.2",
+    "phaser-animated-tiles": "^2.0.2",
+    "raw-loader": "^1.0.0",
+    "source-map-loader": "^0.2.4",
+    "stats-js": "^1.0.0",
+    "tile-extruder": "^1.1.0",
+    "ts-loader": "^5.3.3",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.0",
+    "worker-loader": "^2.0.0"
+  }
+}
