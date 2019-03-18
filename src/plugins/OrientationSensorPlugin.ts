@@ -1,5 +1,4 @@
 export class OrientationSensorPlugin extends Phaser.Plugins.BasePlugin {
-	public relative: boolean = true;
 	public sensorOptions = {
 		frequency: 20,
 		coordinateSystem: 'screen',
@@ -14,23 +13,27 @@ export class OrientationSensorPlugin extends Phaser.Plugins.BasePlugin {
 	public init(data: any) {
 		console.log('sensor plugin init');
 		this.game = this.pluginManager.game;
-
-		this.privateSensor = this.relative
-			? new RelativeOrientationSensor(this.sensorOptions)
-			: new AbsoluteOrientationSensor(this.sensorOptions);
-
-		this.setupEvents();
-
-		this.privateSensor.start();
+		this.initSensor();
 	}
 
 	public get sensor() {
 		return this.privateSensor;
 	}
 
+	public resetSensor() {
+		this.initSensor();
+		console.log('reset sensor');
+	}
+
+	private initSensor() {
+		this.privateSensor = new RelativeOrientationSensor(this.sensorOptions);
+		this.setupEvents();
+		this.privateSensor.start();
+	}
+
 	private setupEvents() {
 		this.privateSensor.onreading = () => {
-			console.log(this.privateSensor.quaternion);
+			// console.log(this.privateSensor.quaternion);
 			this.game.events.emit('sensor:reading',
 				new Phaser.Math.Quaternion(
 					this.privateSensor.quaternion[0],

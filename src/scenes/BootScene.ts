@@ -19,7 +19,7 @@ export class BootScene extends BaseScene{
 		this.permission.permissions.then( (value: any) => {
 			this.game.registry.set('permissions', value);
 			if (value) {
-				this.game.plugins.get('OrientationSensorPlugin', true);
+				// this.game.plugins.get('OrientationSensorPlugin', true);
 			}
 		})
 		.finally( () => {

@@ -38,5 +38,5 @@ window.onload = () => {
 	const game = new KokoGame(gameConfig);
 
 	game.scene.add('BootScene', BootScene, true);
-	game.scene.add('GaneScene', GameScene, true);
+	game.scene.add('GameScene', GameScene, false);
 };

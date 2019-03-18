@@ -1,5 +1,6 @@
 import { OrientationSensorPlugin } from '../plugins/OrientationSensorPlugin';
 import { PermissionPlugin } from '../plugins/PermissionPlugin';
+import { DeviceMotionPlugin } from '../plugins/DeviceMotionPlugin';
 
 // phaser game config
 export const gameConfig: GameConfig = {
@@ -15,9 +16,9 @@ export const gameConfig: GameConfig = {
 		pixelArt: true,
 	},
 	physics: {
-		default: 'arcade',
-		arcade: {
-			gravity: { y: 0 },
+		default: 'matter',
+		matter: {
+			gravity: { y: .5 },
 			debug: true,
 		},
 	},
@@ -35,6 +36,13 @@ export const gameConfig: GameConfig = {
 				plugin: OrientationSensorPlugin,
 				start: false,
 				mapping: null,
+				data: {},
+			},
+			{
+				key: 'DeviceMotionPlugin',
+				plugin: DeviceMotionPlugin,
+				start: true,
+				mapping: 'motion',
 				data: {},
 			},
 		],
