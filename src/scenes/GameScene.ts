@@ -1,10 +1,20 @@
 import { BaseScene } from './BaseScene';
 import { OrientationSensorPlugin } from '../plugins/OrientationSensorPlugin';
+import { Scale } from 'phaser';
+
+const fontStyle = {
+	fontSize: '10px',
+	fontFamily: 'Lucida Console, monospace',
+};
 
 export class GameScene extends BaseScene {
-	quaternion: Phaser.Math.Quaternion;
-	positionText: Phaser.GameObjects.Text;
-	angleText: Phaser.GameObjects.Text;
+	fullScreen: boolean;
+	oriented: boolean;
+	orientation: number;
+
+	rotationText: Phaser.GameObjects.Text;
+	movementText: Phaser.GameObjects.Text;
+	orientationText: Phaser.GameObjects.Text;
 	gravityText: Phaser.GameObjects.Text;
 	brick: Phaser.Physics.Matter.Image;
 
@@ -24,42 +34,45 @@ export class GameScene extends BaseScene {
 	create() {
 		console.info('GameScene - create()');
 
-		this.positionText = this.add.text(10, 10, 'Quaternion data', { fontSize: '10px' })
-			.setScrollFactor(0)
-			.setDepth(10);
-		this.angleText = this.add.text(80, 10, 'Angle data', { fontSize: '10px' })
-			.setScrollFactor(0)
-			.setDepth(10);
-		this.gravityText = this.add.text(160, 10, 'Gravity', { fontSize: '10px' })
-			.setScrollFactor(0)
-			.setDepth(10)
-			.setText(`x: ${this.matter.world.localWorld.gravity.x.toFixed(2)}\ny: ${this.matter.world.localWorld.gravity.y.toFixed(2)}`);
+		this.rotationText = this.add.text(10, 10, 'Rotation', fontStyle)
+							.setScrollFactor(0)
+							.setDepth(10);
+		this.movementText = this.add.text(80, 10, 'Movement', fontStyle)
+							.setScrollFactor(0)
+							.setDepth(10);
+		this.orientationText = this.add.text(140, 10, 'Orientation', fontStyle)
+							.setScrollFactor(0)
+							.setDepth(10);
+		this.gravityText = this.add.text(260, 10, 'Gravity', fontStyle)
+							.setScrollFactor(0)
+							.setDepth(10)
+							.setText(`Gravity\nx: ${this.matter.world.localWorld.gravity.x.toFixed(2)}\ny: ${this.matter.world.localWorld.gravity.y.toFixed(2)}`);
 
-		this.game.events.on('sensor:reading', (reading: Phaser.Math.Quaternion) => {
-			this.quaternion = reading;
+		this.game.events.on('device:motion', (evt: DeviceMotionEvent) => {
+			this.rotationText.setText(`Rotation\na: ${evt.rotationRate.alpha.toFixed(2)}\nb: ${evt.rotationRate.beta.toFixed(2)}\n\g: ${evt.rotationRate.gamma.toFixed(2)}`);
+			this.movementText.setText(`Movement\nx: ${evt.accelerationIncludingGravity.x.toFixed(2)}\ny: ${evt.accelerationIncludingGravity.y.toFixed(2)}\nz: ${evt.accelerationIncludingGravity.z.toFixed(2)}`);
+		});
 
-			const aa = quaternionToAxisAngle(this.quaternion);
-
-			if (this.quaternion) {
-				this.positionText
-					.setText(`x: ${this.quaternion.x.toFixed(2)}\ny: ${this.quaternion.y.toFixed(2)}\nz: ${this.quaternion.z.toFixed(2)}\nw: ${this.quaternion.w.toFixed(2)}`);
-				this.angleText.setText(`x: ${aa[0].x.toFixed(2)}\ny: ${aa[0].y.toFixed(2)}\nz: ${aa[0].z.toFixed(2)}\na: ${aa[1].toFixed(2)}`);
-			} else {
-				this.positionText.setText(this.game.registry.get('sensorError') || 'Could not get sensor data');
-			}
-
+		this.game.events.on('device:orientation', (evt: DeviceOrientationEvent) => {
+			this.orientationText.setText(`Orientation\na: ${evt.alpha.toFixed(2)}\nb: ${evt.beta.toFixed(2)}\ng: ${evt.gamma.toFixed(2)}\nAbs: ${evt.absolute}`);
+			this.matter.world.setGravity(evt.beta / 100, -evt.gamma / 100);
 		});
 
 		this.input.on('pointerup', () => {
-			if (this.scale.isFullscreen) {
-				this.matter.world.setGravity(Phaser.Math.FloatBetween(0, 1) - .5, Phaser.Math.FloatBetween(0, 1) - .5);
-				this.gravityText
-					.setText(`x: ${this.matter.world.localWorld.gravity.x.toFixed(2)}\ny: ${this.matter.world.localWorld.gravity.y.toFixed(2)}`);
-			} else {
+			if (!this.scale.isFullscreen) {
 				this.scale.startFullscreen();
 				screen.orientation.lock('landscape-primary');
-				(this.game.plugins.get('OrientationSensorPlugin') as OrientationSensorPlugin).resetSensor();
 			}
+		});
+
+		this.scale.on(Scale.Events.ENTER_FULLSCREEN, () => {
+			console.log('enter full screen');
+			this.matter.resume();
+		});
+
+		this.scale.on(Scale.Events.LEAVE_FULLSCREEN, () => {
+			console.log('leave full screen');
+			this.matter.pause();
 		});
 
 		this.matter.world.setBounds(0, 0, 1024, 1024, 10, true, true, true, true);
@@ -73,7 +86,7 @@ export class GameScene extends BaseScene {
 				Phaser.Math.Between(10, 200),
 				Phaser.Math.Between(10, 200),
 				'block')
-				.setScale(Phaser.Math.FloatBetween(.25, .5));
+				.setScale(Phaser.Math.FloatBetween(.1, .3));
 		}
 
 		this.matter.add.image(340, 350, 'platform', null, { isStatic: true });
@@ -82,6 +95,8 @@ export class GameScene extends BaseScene {
 
 		this.cameras.main.setBounds(0, 0, 1024, 1024);
 		this.cameras.main.startFollow(this.brick, true, .1, .1);
+
+		this.matter.pause();
 
 	}
 

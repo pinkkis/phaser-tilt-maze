@@ -13,7 +13,7 @@ export class DeviceMotionPlugin extends Phaser.Plugins.BasePlugin {
 
 	private setupEvents() {
 		window.addEventListener('devicemotion', (e: DeviceMotionEvent) => {
-			this.game.events.emit('deivce:motion', e);
+			this.game.events.emit('device:motion', e);
 		});
 		window.addEventListener('deviceorientation', (e: DeviceOrientationEvent) => {
 			this.game.events.emit('device:orientation', e);
